@@ -3,6 +3,7 @@ import 'dart:math';
 class Util {
   static String EMAIL_REGEXP =
       r"^([a-z][a-z0-9\_\-\.]+[a-z0-9])@([a-z0-9]+)(\.[a-z0-9]{2,})+$";
+
   /*static String EMAIL_REGEXP =
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
       r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
@@ -39,7 +40,10 @@ class Util {
   static bool validateEmail(String? value) =>
       validateRegex(EMAIL_REGEXP, value);
 
-  static double trigoFunc(Function func, double degrees) => func(degrees * pi / 180);
+  static double degreesToRadians(double d) => d * pi / 180;
+
+  static double trigoFunc(Function func, double degrees) =>
+      func(degreesToRadians(degrees));
 
   static int cuadrante(double angle) {
     if (angle >= 0 && angle < 90) {

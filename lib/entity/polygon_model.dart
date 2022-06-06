@@ -13,23 +13,30 @@ enum PolygonSize {
 
 class ModelPolygon {
   final PolygonSize polygonSize;
-  int side;
+  int sides;
   double size;
   late double angle;
+  late double angleInt;
   late double radio;
-  late ModelPoint centro = ModelPoint();
+  late double apothem;
+  late double area;
+  late double perimetro;
+
+  ModelPoint centro = ModelPoint();
   List<ModelPoint> puntos = [];
 
   ModelPolygon({
-    required this.side,
+    required this.sides,
     required this.size,
     this.polygonSize = PolygonSize.SIDE,
   }) {
     /// Se calcula la apertura del angulo interno con base a la cantidad de aristas
-    angle = 360 / side;
+    angle = 360 / sides;
+    angleInt = 180 - angle;
 
     if( polygonSize ==  PolygonSize.ABSOLUTE_DIAMETER ) {
       radio = size / 2;
+      size = Util.trigoFunc(sin, angle / 2) * radio * 2;
     } else if( polygonSize ==  PolygonSize.RELATIVE_DIAMETER ) {
 
     } else {
@@ -37,21 +44,24 @@ class ModelPolygon {
       radio = (size / 2) / Util.trigoFunc(sin, angle / 2);
     }
 
-    calcularPuntos(side == 3 ? 90 : (side == 4 ? 45 : 0));
+    apothem = Util.trigoFunc(cos, angle / 2) * radio;
+    area = ( apothem * size / 2 ) * sides;
+    perimetro = size * sides;
+
+    calcularPuntos(90);
   }
 
   /// Se calculan las coordenadas de cada punto
   void calcularPuntos([double baseAngle = 0]) {
     /// puntos calculados con base al angulo de apertura
-    for (int i = 0; i < side; i++) {
+    for (int i = 0; i < sides; i++) {
       double a = (i * angle) + baseAngle;
       a -= ((a / 360).floor() * 360);
 
       /// Se debe ajustar el angulo dentro de la circunferencia
       add(ModelPoint.offset(
         centro,
-        Util.trigoFunc(cos, a) * radio,
-        Util.trigoFunc(sin, a) * radio,
+        radio,
         a,
       ));
     }
@@ -137,8 +147,8 @@ class ModelPolygon {
   }
 
   void imprime() {
-    /*print("arista $size, radio $radio, angulo $angle");
-    puntos.forEach((element) {
+    print("\nlados: $sides, arista $size, radio $radio, angulo $angle, angle interno $angleInt,\n apothem $apothem, area $area, perimetro $perimetro");
+    /*puntos.forEach((element) {
       element.imprime();
     });*/
   }

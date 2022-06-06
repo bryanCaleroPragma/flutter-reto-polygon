@@ -11,7 +11,7 @@ class PolygonPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
-    final poligono = ModelPolygon(side: sides, size: this.size, polygonSize: PolygonSize.SIDE);
+    final poligono = ModelPolygon(sides: sides, size: this.size, polygonSize: PolygonSize.SIDE);
     poligono.draw(canvas: canvas,
       size: size,
       circle: false,

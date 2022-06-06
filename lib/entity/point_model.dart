@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../util.dart';
 
 class ModelPoint {
@@ -10,13 +12,15 @@ class ModelPoint {
 
   /// Se calcula el punto desfasado con base a otro punto de referencia
   /// en función del angulo desde el cual fué calculado
-  factory ModelPoint.offset(ModelPoint p, double x, double y, [double a = 0]) {
+  factory ModelPoint.offset(ModelPoint p, double radio, [double a = 0]) {
     int c = Util.cuadrante(a);
+    double x = (Util.trigoFunc(cos, a) * radio).abs();
+    double y = (Util.trigoFunc(sin, a) * radio).abs();
     return ModelPoint(
-      p.x + (x.abs() * (c == 1 || c == 4 ? 1 : -1)),
-      p.y + (y.abs() * (c == 3 || c == 4 ? 1 : -1)),
-      x.abs(),
-      y.abs(),
+      p.x + (x * (c == 1 || c == 4 ? 1 : -1)),
+      p.y + (y * (c == 3 || c == 4 ? 1 : -1)),
+      x,
+      y,
     );
   }
 
